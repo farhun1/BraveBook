@@ -27,6 +27,7 @@ import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.PanoramaWideAngle
 import androidx.compose.material.icons.outlined.Pinch
 import androidx.compose.material.icons.outlined.Shield
+import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -84,6 +85,13 @@ fun SettingsContent(
                     supportingText = stringResource(R.string.hide_sponsored_ads_from_your_feed),
                     isActive = removeAds.value,
                     onClick = { viewModel.setRemoveAds(!removeAds.value) },
+                ),
+                SettingsItem(
+                    icon = Icons.Outlined.Block,
+                    title = stringResource(R.string.brave_blocklist_title),
+                    supportingText = stringResource(R.string.brave_blocklist_supporting),
+                    isActive = braveBlockList.value,
+                    onClick = { viewModel.setBraveBlockList(!braveBlockList.value) },
                 ),
                 SettingsItem(
                     icon = Icons.Outlined.FileDownload,
@@ -198,6 +206,7 @@ private fun HideOptionsDialog(
     val hideStories = viewModel.hideStories.collectAsState()
     val hidePeopleYouMayKnow = viewModel.hidePeopleYouMayKnow.collectAsState()
     val hideGroups = viewModel.hideGroups.collectAsState()
+    val braveBlockList = viewModel.braveBlockList.collectAsState()
 
     Dialog(
         onDismissRequest = { onDismiss() }

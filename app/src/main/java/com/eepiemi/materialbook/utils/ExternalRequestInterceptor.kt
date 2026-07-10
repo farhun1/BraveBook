@@ -14,6 +14,13 @@ class ExternalRequestInterceptor(
         navigator: WebViewNavigator
     ): WebRequestInterceptResult {
 
+        // Brave Block List: reject ad/tracker requests before they load.
+        // Additive — never blocks the main Facebook navigation (handled in
+        // BraveBlockList.shouldBlock) and never un-blocks anything.
+        if (BraveBlockList.shouldBlock(request.url, request.isForMainFrame)) {
+            return WebRequestInterceptResult.Reject
+        }
+
         val internalUrlRegex = Regex(
             """https?://(?!(?:l|lm)\.)[^/]*(?:facebook|messenger)\.com/.*"""
         )

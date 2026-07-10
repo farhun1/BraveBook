@@ -41,6 +41,7 @@ If enabled, the app:
 *  Uses Material You colors instead of Facebook's blues
 *  Makes Facebook AMOLED Black
 *  Blocks sponsored ads
+*  Blocks trackers and ads at the network level using [Brave's filter rules](https://github.com/brave/adblock-lists/)
 *  Hides distractions like:
     *  Suggested posts
     *  Reels

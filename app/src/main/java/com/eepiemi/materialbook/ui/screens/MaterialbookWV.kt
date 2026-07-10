@@ -42,6 +42,7 @@ import com.eepiemi.materialbook.ui.viewmodel.MainViewModel
 import com.eepiemi.materialbook.ui.viewmodel.SettingsViewModel
 import com.eepiemi.materialbook.utils.DESKTOP_USER_AGENT
 import com.eepiemi.materialbook.utils.ExternalRequestInterceptor
+import com.eepiemi.materialbook.utils.BraveBlockList
 import com.eepiemi.materialbook.utils.fileChooserWebViewParams
 import com.eepiemi.materialbook.utils.jsBridge.ClipboardBridge
 import com.eepiemi.materialbook.utils.jsBridge.DownloadBridge
@@ -117,6 +118,11 @@ fun MaterialbookWebView(
     val isDesktop by settingsVM.desktopLayout.collectAsState()
     val isAutoRevert by settingsVM.isRevertDesktop.collectAsState()
     val isAutoDesktop = rememberAutoDesktop()
+    val braveBlockList by settingsVM.braveBlockList.collectAsState()
+
+    LaunchedEffect(braveBlockList) {
+        BraveBlockList.setEnabled(braveBlockList)
+    }
 
     LaunchedEffect(Unit) {
         if (isAutoDesktop && !isDesktop) {
@@ -127,6 +133,8 @@ fun MaterialbookWebView(
             settingsVM.setRevertDesktop(false)
             settingsVM.setDesktopLayout(false)
         }
+        // Pull the latest Brave Block List; falls back to the bundled copy.
+        BraveBlockList.refresh(resources)
     }
 
     var isLoading by rememberSaveable { mutableStateOf(true) }
@@ -256,6 +264,9 @@ fun MaterialbookWebView(
         platformWebViewParams = fileChooserWebViewParams(),
         captureBackPresses = false,
         onCreated = { webView ->
+
+            // Make Brave Block List active immediately, before the first request.
+            BraveBlockList.loadInitial(webView.context.resources)
 
             val cookieManager = CookieManager.getInstance()
             cookieManager.setAcceptCookie(true)

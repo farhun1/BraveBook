@@ -26,6 +26,7 @@ class SettingsDataStore(private val context: Context) {
         val HIDE_STORIES = booleanPreferencesKey("hide_stories")
         val HIDE_PEOPLE_YOU_MAY_KNOW = booleanPreferencesKey("hide_people_you_may_know")
         val HIDE_GROUPS = booleanPreferencesKey("hide_groups")
+        val BRAVE_BLOCK_LIST = booleanPreferencesKey("brave_block_list")
         val isRevertDesktop = booleanPreferencesKey("is_revert_desktop")
     }
 
@@ -104,5 +105,10 @@ class SettingsDataStore(private val context: Context) {
     val hideGroups = context.dataStore.data.map { it[HIDE_GROUPS] ?: false }
     suspend fun setHideGroups(hideGroups: Boolean) {
         context.dataStore.edit { it[HIDE_GROUPS] = hideGroups }
+    }
+
+    val braveBlockList = context.dataStore.data.map { it[BRAVE_BLOCK_LIST] ?: true }
+    suspend fun setBraveBlockList(braveBlockList: Boolean) {
+        context.dataStore.edit { it[BRAVE_BLOCK_LIST] = braveBlockList }
     }
 }

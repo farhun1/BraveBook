@@ -10,6 +10,7 @@ import com.eepiemi.materialbook.data.local.SettingsDataStore.Companion.DESKTOP_L
 import com.eepiemi.materialbook.data.local.SettingsDataStore.Companion.ENABLE_COPY_TO_CLIPBOARD
 import com.eepiemi.materialbook.data.local.SettingsDataStore.Companion.ENABLE_DOWNLOAD_CONTENT
 import com.eepiemi.materialbook.data.local.SettingsDataStore.Companion.HIDE_GROUPS
+import com.eepiemi.materialbook.data.local.SettingsDataStore.Companion.BRAVE_BLOCK_LIST
 import com.eepiemi.materialbook.data.local.SettingsDataStore.Companion.HIDE_PEOPLE_YOU_MAY_KNOW
 import com.eepiemi.materialbook.data.local.SettingsDataStore.Companion.HIDE_REELS
 import com.eepiemi.materialbook.data.local.SettingsDataStore.Companion.HIDE_STORIES
@@ -103,6 +104,11 @@ class SettingsViewModel(
         initialValue = initialPrefs[HIDE_GROUPS] ?: false,
         started = SharingStarted.WhileSubscribed()
     )
+    val braveBlockList = dataStore.braveBlockList.stateIn(
+        scope = viewModelScope,
+        initialValue = initialPrefs[BRAVE_BLOCK_LIST] ?: true,
+        started = SharingStarted.WhileSubscribed()
+    )
     val isRevertDesktop = dataStore.revertDesktop.stateIn(
         scope = viewModelScope,
         initialValue = false,
@@ -190,6 +196,12 @@ class SettingsViewModel(
     fun setHideGroups(hideGroups: Boolean) {
         viewModelScope.launch {
             dataStore.setHideGroups(hideGroups)
+        }
+    }
+
+    fun setBraveBlockList(braveBlockList: Boolean) {
+        viewModelScope.launch {
+            dataStore.setBraveBlockList(braveBlockList)
         }
     }
 

@@ -37,6 +37,8 @@
     <string name="use_two_fingers_to_zoom_in_or_out">Use two fingers to zoom in or out</string>
     <string name="customize_feed">Show or hide items</string>
     <string name="hide_sponsored_ads_from_your_feed">Hide sponsored ads from feed</string>
+    <string name="brave_blocklist_title">Brave Block List</string>
+    <string name="brave_blocklist_supporting">Block trackers and ads with Brave\'s filter rules</string>
     <string name="enable_download_button_on_media_view">Enable download button on media view</string>
     <string name="enable_copy_to_clipboard_button_on_media_view">Enable copy to clipboard button on media view</string>
     <string name="materialbook_settings">Materialbook settings</string>
