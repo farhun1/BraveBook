@@ -12,8 +12,9 @@ const val SCRIPT_SRC = "https://raw.githubusercontent.com/eepiemi/Materialbook/r
 
 data class Script(
     val isEnabled: Boolean,
-    @param:RawRes val resourceId:  Int,
-    val scriptTitle: String
+    @param:RawRes val resourceId: Int,
+    val scriptTitle: String,
+    val useRemote: Boolean = true
 )
 
 suspend fun fetchScripts(
@@ -23,7 +24,7 @@ suspend fun fetchScripts(
     val httpClient = HttpClient(OkHttp)
     return buildString {
         scripts.filter { it.isEnabled }.forEach { script ->
-            val content =
+            val content = if (script.useRemote) {
                 runCatching {
                     val res = httpClient.get(SCRIPT_SRC + script.scriptTitle)
                     if (res.status == HttpStatusCode.OK) {
@@ -34,6 +35,10 @@ suspend fun fetchScripts(
                 }.getOrElse {
                     fallbackContent(script.resourceId)
                 }
+            } else {
+                // Pinned script: always use the bundled (fixed) copy.
+                fallbackContent(script.resourceId)
+            }
             append(content)
         }
     }
