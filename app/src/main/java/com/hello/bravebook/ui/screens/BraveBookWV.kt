@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.View
 import android.webkit.CookieManager
 import android.webkit.WebChromeClient
+import android.webkit.WebSettings
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
@@ -337,6 +338,16 @@ fun BraveBookWebView(
                 )
 
                 setLayerType(View.LAYER_TYPE_HARDWARE, null)
+
+                // Bug 1 hardening: set media flags directly on the real WebSettings so video
+                // playback never depends on the KMP wrapper forwarding them.
+                settings.apply {
+                    javaScriptEnabled = true
+                    domStorageEnabled = true
+                    databaseEnabled = true
+                    mediaPlaybackRequiresUserGesture = false
+                    mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+                }
 
                 overScrollMode = View.OVER_SCROLL_NEVER
                 isVerticalScrollBarEnabled = false
