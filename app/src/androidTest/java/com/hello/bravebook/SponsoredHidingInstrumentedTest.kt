@@ -2,12 +2,17 @@ package com.hello.bravebook
 
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.json.JSONObject
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
+@RunWith(AndroidJUnit4::class)
 class SponsoredHidingInstrumentedTest {
 
     @Test
@@ -30,7 +35,7 @@ class SponsoredHidingInstrumentedTest {
                     view?.evaluateJavascript(adblockJs) {
                         view.postDelayed({
                             val probe = """
-                                JSON.stringify({
+                                ({
                                   hidden: document.querySelectorAll('[data-bravebook-sponsored="true"]').length,
                                   normalDisplay: getComputedStyle(document.querySelector('[data-pagelet="FeedUnit2"]')).display
                                 })
@@ -45,14 +50,15 @@ class SponsoredHidingInstrumentedTest {
             }
 
             webView.loadDataWithBaseURL(
-                "https://m.facebook.com/", fixture, "text/html", "utf-8", null
+                "https://localhost/", fixture, "text/html", "utf-8", null
             )
         }
 
         assertTrue("timed out waiting for WebView", latch.await(20, TimeUnit.SECONDS))
         val json = result ?: throw AssertionError("no result from WebView")
-        // evaluateJavascript wraps the JSON string in quotes; check the contents.
-        assertTrue("expected 2 sponsored units hidden, got: $json", json.contains("\"hidden\":2"))
-        assertTrue("normal post must stay visible, got: $json", json.contains("\"normalDisplay\":\"block\""))
+        // evaluateJavascript returns the object JSON-encoded; parse it.
+        val obj = JSONObject(json)
+        assertEquals(2, obj.getInt("hidden"))
+        assertEquals("block", obj.getString("normalDisplay"))
     }
 }
