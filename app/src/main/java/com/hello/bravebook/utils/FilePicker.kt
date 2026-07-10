@@ -4,8 +4,11 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.view.View
 import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
 import android.webkit.WebView
+import com.hello.bravebook.utils.FullscreenManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,11 +24,21 @@ import com.multiplatform.webview.web.PlatformWebViewParams
 // src: https://github.com/KevinnZou/compose-webview-multiplatform
 
 @Composable
-fun fileChooserWebViewParams(): PlatformWebViewParams {
+fun fileChooserWebViewParams(
+    onFullscreenView: (View?) -> Unit,
+): PlatformWebViewParams {
     var fileChooserIntent by remember { mutableStateOf<Intent?>(null) }
 
+    val fullscreenManager = remember { FullscreenManager() }
+
     val webViewChromeClient =
-        remember { FileChoosableWebChromeClient { fileChooserIntent = it } }
+        remember {
+            FileChoosableWebChromeClient(
+                onShowFilePicker = { fileChooserIntent = it },
+                fullscreenManager = fullscreenManager,
+                onFullscreenView = onFullscreenView,
+            )
+        }
 
     val launcher =
         rememberLauncherForActivityResult(
@@ -74,6 +87,8 @@ private fun Intent.getUris(): List<Uri>? {
 
 private class FileChoosableWebChromeClient(
     private val onShowFilePicker: (Intent) -> Unit,
+    private val fullscreenManager: FullscreenManager,
+    private val onFullscreenView: (View?) -> Unit,
 ) : AccompanistWebChromeClient() {
     private var filePathCallback: ValueCallback<Array<Uri>>? = null
 
@@ -99,5 +114,19 @@ private class FileChoosableWebChromeClient(
     fun cancelFileChooser() {
         filePathCallback?.onReceiveValue(null)
         filePathCallback = null
+    }
+
+    // --- Fullscreen video support (Bug 1) ---
+    override fun onShowCustomView(view: View?, callback: WebChromeClient.CustomViewCallback?) {
+        if (view == null) return
+        fullscreenManager.enter(view, callback ?: return)
+        onFullscreenView(view)
+    }
+
+    override fun onHideCustomView() {
+        if (!fullscreenManager.isFullscreen) return
+        val cb = fullscreenManager.exit()
+        onFullscreenView(null)
+        (cb as? WebChromeClient.CustomViewCallback)?.onCustomViewHidden()
     }
 }

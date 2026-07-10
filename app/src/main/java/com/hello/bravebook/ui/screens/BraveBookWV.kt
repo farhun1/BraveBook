@@ -3,10 +3,12 @@ package com.hello.bravebook.ui.screens
 import android.content.Intent
 import android.view.View
 import android.webkit.CookieManager
+import android.webkit.WebChromeClient
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +25,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.zIndex
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
@@ -43,6 +47,7 @@ import com.hello.bravebook.ui.viewmodel.SettingsViewModel
 import com.hello.bravebook.utils.DESKTOP_USER_AGENT
 import com.hello.bravebook.utils.ExternalRequestInterceptor
 import com.hello.bravebook.utils.BraveBlockList
+import com.hello.bravebook.utils.FullscreenManager
 import com.hello.bravebook.utils.fileChooserWebViewParams
 import com.hello.bravebook.utils.jsBridge.ClipboardBridge
 import com.hello.bravebook.utils.jsBridge.DownloadBridge
@@ -98,9 +103,18 @@ fun BraveBookWebView(
         }
     }
 
+    val fullscreenManager = remember { FullscreenManager() }
+    var fullscreenView by remember { mutableStateOf<View?>(null) }
+
     // allow exiting while scrolling to top.
     var exitScroll by remember { mutableStateOf(false) }
     BackHandler {
+        if (fullscreenView != null) {
+            val cb = fullscreenManager.exit()
+            fullscreenView = null
+            (cb as? WebChromeClient.CustomViewCallback)?.onCustomViewHidden()
+            return@BackHandler
+        }
         if (exitScroll) {
             activity?.finish()
         } else {
@@ -274,7 +288,9 @@ fun BraveBookWebView(
             ),
         state = state,
         navigator = navigator,
-        platformWebViewParams = fileChooserWebViewParams(),
+        platformWebViewParams = fileChooserWebViewParams(
+            onFullscreenView = { fullscreenView = it }
+        ),
         captureBackPresses = false,
         onCreated = { webView ->
 
@@ -331,4 +347,14 @@ fun BraveBookWebView(
             }
         }
     )
+
+    fullscreenView?.let { view ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .zIndex(1000f)
+        ) {
+            AndroidView(factory = { view })
+        }
+    }
 }
