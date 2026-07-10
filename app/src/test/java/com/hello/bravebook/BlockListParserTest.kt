@@ -56,7 +56,7 @@ class BlockListParserTest {
             "##.ad-banner",
             "#@#.sponsored",
             "#%#//scriptlet(...)",
-            "||tracker.com^$domain=example.org",
+            "||tracker.com^\${'$'}domain=example.org",
             "example.com##.ads"
         )
         assertFalse(BraveBlockList.shouldBlock("https://tracker.com/x", false))
