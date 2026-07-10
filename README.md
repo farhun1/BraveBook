@@ -1,5 +1,5 @@
 <p align="middle">
-    <img src='./fastlane/metadata/android/en-US/images/featureGraphic.png' alt="Materialbook banner" width="100%">
+    <img src='./fastlane/metadata/android/en-US/images/featureGraphic.png' alt="BraveBook banner" width="100%">
 </p>
 
 <h1 align="middle">
@@ -63,7 +63,7 @@ If enabled, the app:
     * Or via terminal: 
     ```
     git clone https://github.com/eepiemi/Materialbook.git
-    cd Materialbook
+    cd BraveBook
     ``` 
 2.  **Open in Android Studio.** (only if cloned via terminal)
     * Select Open an Existing Project and choose the cloned folder.

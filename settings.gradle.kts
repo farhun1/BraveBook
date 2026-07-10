@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Materialbook"
+rootProject.name = "BraveBook"
 include(":app")
  

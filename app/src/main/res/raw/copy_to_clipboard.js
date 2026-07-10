@@ -14,7 +14,7 @@
   let isProcessing = false;
   let currentContentContainer = null;
   let lastCopiedUrl = null;
-  const COPY_BTN_ID = "materialbook-clipboard-copier";
+  const COPY_BTN_ID = "bravebook-clipboard-copier";
 
   // Selectors for finding media content
   const SELECTORS = {

@@ -14,7 +14,7 @@
   let isProcessing = false;
   let currentContentContainer = null;
   let lastDownloadedUrl = null;
-  const DOWNLOAD_BTN_ID = "materialbook-global-downloader";
+  const DOWNLOAD_BTN_ID = "bravebook-global-downloader";
 
   // Selectors for finding media content
   const SELECTORS = {

@@ -14,11 +14,11 @@ kotlin {
 }
 
 extensions.configure<ApplicationExtension> {
-    namespace = "com.eepiemi.materialbook"
+    namespace = "com.hello.bravebook"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.eepiemi.materialbook"
+        applicationId = "com.hello.bravebook"
         minSdk = 23
         targetSdk = 36
         versionCode = 13

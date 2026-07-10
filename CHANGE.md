@@ -1,4 +1,4 @@
-## Materialbook - v1.0.0
+## BraveBook - v1.0.0
 
 <ins>**Changelog:**</ins>
 
