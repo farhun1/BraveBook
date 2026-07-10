@@ -4,7 +4,6 @@ import android.content.Intent
 import android.view.View
 import android.webkit.CookieManager
 import android.webkit.WebChromeClient
-import android.webkit.WebSettings
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
@@ -346,7 +345,9 @@ fun BraveBookWebView(
                     domStorageEnabled = true
                     databaseEnabled = true
                     mediaPlaybackRequiresUserGesture = false
-                    mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+                    // Mixed content is left at the WebView default (NEVER_ALLOW) so
+                    // http(s) subresources can't be downgraded/injected into the
+                    // authenticated facebook.com origin. Don't set ALWAYS_ALLOW here.
                 }
 
                 overScrollMode = View.OVER_SCROLL_NEVER
