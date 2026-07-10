@@ -20,3 +20,22 @@ local.properties
 
 # Project guidance file (kept local, not shared in repo)
 CLAUDE.md
+
+# Session/planning artifacts (not repo content)
+docs/
+
+# Signing keys — never commit (security: would leak release credentials)
+*.keystore
+*.jks
+
+# Android App Bundle build output
+*.aab
+
+# Editor / OS junk
+*.swp
+*.swo
+*.bak
+*.orig
+*.tmp
+Thumbs.db
+*.log
