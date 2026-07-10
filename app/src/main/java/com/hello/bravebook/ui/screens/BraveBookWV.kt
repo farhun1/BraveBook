@@ -289,6 +289,7 @@ fun BraveBookWebView(
         state = state,
         navigator = navigator,
         platformWebViewParams = fileChooserWebViewParams(
+            fullscreenManager = fullscreenManager,
             onFullscreenView = { fullscreenView = it }
         ),
         captureBackPresses = false,

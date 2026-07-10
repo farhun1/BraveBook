@@ -25,11 +25,10 @@ import com.multiplatform.webview.web.PlatformWebViewParams
 
 @Composable
 fun fileChooserWebViewParams(
+    fullscreenManager: FullscreenManager,
     onFullscreenView: (View?) -> Unit,
 ): PlatformWebViewParams {
     var fileChooserIntent by remember { mutableStateOf<Intent?>(null) }
-
-    val fullscreenManager = remember { FullscreenManager() }
 
     val webViewChromeClient =
         remember {
