@@ -17,3 +17,6 @@ local.properties
 
 # Agent working directory
 .claude/
+
+# Project guidance file (kept local, not shared in repo)
+CLAUDE.md

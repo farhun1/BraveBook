@@ -21,3 +21,11 @@
 #-renamesourcefileattribute SourceFile
 
 -dontwarn org.slf4j.impl.StaticLoggerBinder
+
+# Keep WebView JavaScript bridges injected via addJavascriptInterface.
+# R8 obfuscation would rename/strip @JavascriptInterface methods and silently
+# break the page<->Kotlin bridge at runtime in release builds.
+-keep class com.hello.bravebook.utils.jsBridge.** { *; }
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}
