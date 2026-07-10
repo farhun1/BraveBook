@@ -35,7 +35,28 @@ extensions.configure<ApplicationExtension> {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("debug")
+            // Sign with a real keystore when CI provides one via env vars
+            // (KEYSTORE_FILE / KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD).
+            // Local dev builds fall back to the debug keystore — do NOT ship
+            // a debug-signed artifact; CI must set the env vars above.
+            signingConfig = signingConfigs.create("releaseFromEnv") {
+                val ksPath = System.getenv("KEYSTORE_FILE")
+                val ksPass = System.getenv("KEYSTORE_PASSWORD")
+                val alias = System.getenv("KEY_ALIAS")
+                val keyPass = System.getenv("KEY_PASSWORD")
+                if (ksPath != null && ksPass != null && alias != null && keyPass != null) {
+                    storeFile = file(ksPath)
+                    storePassword = ksPass
+                    this.keyAlias = alias
+                    keyPassword = keyPass
+                } else {
+                    val d = signingConfigs.getByName("debug")
+                    storeFile = d.storeFile
+                    storePassword = d.storePassword
+                    this.keyAlias = d.keyAlias
+                    keyPassword = d.keyPassword
+                }
+            }
         }
         debug { applicationIdSuffix = ".test" }
     }
