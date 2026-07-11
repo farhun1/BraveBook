@@ -1,3 +1,9 @@
+## BraveBook - v1.0.1
+
+<ins>**Changelog:**</ins>
+
+* Security: Inject all customization scripts from the app's bundled `res/raw` copies instead of fetching them at runtime from a third-party GitHub repository. This removes a supply-chain risk where remote script content could execute inside the signed-in Facebook WebView. (The ad/tracker filter blocklist still refreshes remotely.)
+
 ## BraveBook - v1.0.0
 
 <ins>**Changelog:**</ins>
