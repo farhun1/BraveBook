@@ -343,7 +343,6 @@ fun BraveBookWebView(
                 settings.apply {
                     javaScriptEnabled = true
                     domStorageEnabled = true
-                    databaseEnabled = true
                     mediaPlaybackRequiresUserGesture = false
                     // Mixed content is left at the WebView default (NEVER_ALLOW) so
                     // http(s) subresources can't be downgraded/injected into the
