@@ -38,11 +38,13 @@ class MainViewModel(
         resources: Resources,
         settings: SettingsViewModel
     ) {
+        // All scripts resolve to their bundled res/raw copy. fetchScripts no longer
+        // fetches any script remotely — only the filter blocklist still refreshes remotely.
         val scripts = listOf(
             Script(true, R.raw.scripts, "scripts.js"), // always apply
-            Script(settings.removeAds.value, R.raw.adblock, "adblock.js", useRemote = false),
-            Script(settings.enableDownloadContent.value, R.raw.download_content, "download_content.js", useRemote = false),
-            Script(settings.enableCopyToClipboard.value, R.raw.copy_to_clipboard, "copy_to_clipboard.js", useRemote = false),
+            Script(settings.removeAds.value, R.raw.adblock, "adblock.js"),
+            Script(settings.enableDownloadContent.value, R.raw.download_content, "download_content.js"),
+            Script(settings.enableCopyToClipboard.value, R.raw.copy_to_clipboard, "copy_to_clipboard.js"),
             Script(settings.stickyNavbar.value, R.raw.sticky_navbar, "sticky_navbar.js"),
             Script(!settings.pinchToZoom.value, R.raw.pinch_to_zoom, "pinch_to_zoom.js"),
             Script(settings.materialYou.value, R.raw.material_you, "material_you.js"),
