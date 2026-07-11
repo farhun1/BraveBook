@@ -39,6 +39,8 @@ fun fileChooserWebViewParams(
             )
         }
 
+    val webViewClient = remember { BlockingWebViewClient() }
+
     val launcher =
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.StartActivityForResult(),
@@ -76,7 +78,7 @@ fun fileChooserWebViewParams(
         }
     }
 
-    return PlatformWebViewParams(chromeClient = webViewChromeClient)
+    return PlatformWebViewParams(client = webViewClient, chromeClient = webViewChromeClient)
 }
 
 private fun Intent.getUris(): List<Uri>? {
