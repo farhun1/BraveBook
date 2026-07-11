@@ -300,7 +300,10 @@ fun BraveBookWebView(
 
             val cookieManager = CookieManager.getInstance()
             cookieManager.setAcceptCookie(true)
-            cookieManager.setAcceptThirdPartyCookies(webView, true)
+            // Privacy: default is false. Leave it false so trackers/third parties
+            // not on the curated BraveBlockList can't set or read cross-site
+            // cookies and profile the logged-in user. (Vuln 2.)
+            cookieManager.setAcceptThirdPartyCookies(webView, false)
             cookieManager.flush()
 
             state.webSettings.apply {
