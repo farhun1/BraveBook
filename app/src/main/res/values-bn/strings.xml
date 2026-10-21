@@ -28,7 +28,7 @@
     <string name="use_two_fingers_to_zoom_in_or_out">জুম করতে দুই আঙুল ব্যবহার করুন</string>
     <string name="customize_feed">আইটেম দেখান বা হাইড করুন</string>
     <string name="hide_sponsored_ads_from_your_feed">ফিড থেকে স্পন্সরড বিজ্ঞাপন হাইড করুন</string>
-    <string name="enable_download_button_on_media_view">মিডিয়া ভিউ'তে ডাউনলোড বাটন চালু করুন</string>
+    <string name="enable_download_button_on_media_view">মিডিয়া ভিউ\'তে ডাউনলোড বাটন চালু করুন</string>
     <string name="bravebook_settings">BraveBook সেটিংস</string>
     <string name="copy_to_clipboard_title">ক্লিপবোর্ডে কপি করুন</string>
     <string name="image_copied_to_clipboard">ছবি ক্লিপবোর্ডে কপি করা হয়েছে</string>
@@ -37,8 +37,8 @@
     <string name="material_you_title">ম্যাটেরিয়াল ইউ</string>
     <string name="failed_to_copy_image">ছবি কপি করতে ব্যর্থ</string>
     <string name="clipboard_not_supported">এই ভার্সনে ক্লিপবোর্ড সাপোর্ট করে না</string>
-    <string name="enable_material_you_theming_for_facebook">ফেসবুকের জন্য 'ম্যাটেরিয়াল ইউ' থিম চালু করুন</string>
-    <string name="enable_copy_to_clipboard_button_on_media_view">মিডিয়া ভিউ'তে ‘কপি টু ক্লিপবোর্ড’ বাটন চালু করুন</string>
+    <string name="enable_material_you_theming_for_facebook">ফেসবুকের জন্য \'ম্যাটেরিয়াল ইউ\' থিম চালু করুন</string>
+    <string name="enable_copy_to_clipboard_button_on_media_view">মিডিয়া ভিউ\'তে ‘কপি টু ক্লিপবোর্ড’ বাটন চালু করুন</string>
     <string name="support_my_work">আমার কাজকে সাপোর্ট করুন! ☕</string>
     <string name="not_supported">সাপোর্ট করে না</string>
 </resources>
