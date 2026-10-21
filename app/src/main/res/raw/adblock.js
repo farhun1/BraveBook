@@ -94,6 +94,37 @@
   });
   observer.observe(document.body, { childList: true, subtree: true });
 
+  // Mobile layout (from upstream): the "Sponsored" label, its separator and the
+  // special icon all use the colour #8a8d91 in both themes, so the label can be
+  // found by colour even when the text node walk misses it.
+  function removeFeedAds(root) {
+    root = root || document;
+    const spans = root.querySelectorAll(
+      'span.f5[style*="color:#8a8d91"]:not([data-nosnippet])'
+    );
+    for (const span of spans) {
+      const parent = span.parentElement;
+      if (!parent || !parent.matches('div.native-text.rslh')) continue;
+      const container = parent.closest(
+        'div[data-dcm-id="1"][data-mcomponent="MContainer"]'
+      );
+      if (!container) continue;
+      if (container.getAttribute('data-bravebook-sponsored') === 'true') continue;
+      const postSeparator = container.previousElementSibling;
+      hideSponsored(container);
+      if (postSeparator &&
+          postSeparator.offsetHeight === 1 &&
+          postSeparator.querySelector('[data-fd-action]')) {
+        postSeparator.style.display = 'none';
+      }
+    }
+  }
+
+  removeFeedAds();
+
+  const feedAdsObserver = new MutationObserver(() => removeFeedAds());
+  feedAdsObserver.observe(document.body, { childList: true, subtree: true });
+
   // Reels: sponsored reels use the same label inside vertically-snappable units.
   function containsSponsoredText(text) {
     const lower = (text || '').toLowerCase();
