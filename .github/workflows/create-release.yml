@@ -13,23 +13,20 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '21'
           cache: 'gradle'
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          # Default installs the removed 'tools' package and fails; the next step installs what we need.
-          packages: ''
+        uses: android-actions/setup-android@v4
 
       - name: Install SDK packages and accept licenses
         run: |
@@ -60,7 +57,7 @@ jobs:
         run: cp app/build/outputs/apk/release/app-release.apk app-release.apk
 
       - name: Upload APK Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: apk-artifact
           path: app-release.apk
@@ -68,12 +65,12 @@ jobs:
 
   release:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Create Tag for Manual Trigger
         if: github.event_name == 'workflow_dispatch'
@@ -82,7 +79,7 @@ jobs:
           git push origin ${{ github.event.inputs.release_tag }}
 
       - name: Download APK Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: apk-artifact
 
@@ -105,7 +102,7 @@ jobs:
           fi
 
       - name: Create Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ github.event.inputs.release_tag || github.ref_name }}
           files: BraveBook_${{ github.event.inputs.release_tag || github.ref_name }}.apk
