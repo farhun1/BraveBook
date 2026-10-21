@@ -32,34 +32,29 @@
   });
 })();
 
-// Hide group posts from the main feed (mobile)
+// Hide group posts from the main feed. Rescans the whole feed on every
+// mutation because post headers render after their container.
 (() => {
-  const hideGroupPosts = (nodes) => {
-    if (window.location.pathname !== '/') return;
+  // Desktop: the post header's profile-name link points to /groups/.
+  const desktopGroupPosts = () =>
+    [...document.querySelectorAll('[aria-posinset] [data-ad-rendering-role="profile_name"] a[href*="/groups/"]')]
+      .map(a => a.closest('[aria-posinset]'));
 
-    nodes.forEach(node => {
-      if (!(node instanceof HTMLElement)) return;
-
-      const containers = node.matches('[data-tracking-duration-id]')
-        ? [node]
-        : Array.from(node.querySelectorAll?.('[data-tracking-duration-id]') || []);
-
-      containers.forEach(container => {
-        // Only match a group link in the post's header/byline (h3), not
-        // anywhere in the post body, so posts that merely mention/share a
-        // group link aren't hidden along with actual group-origin posts.
-        const header = container.querySelector('h3[data-tti-phase="-1"]');
-        if (header?.querySelector('a[href*="/groups/"]')) {
-          container.style.display = 'none';
-        }
-      });
+  // Mobile renders no links. A group post's avatar is the square group icon
+  // with the author's round avatar overlaid; other posts start with a round one.
+  const mobileGroupPosts = () =>
+    [...document.querySelectorAll('[data-tracking-duration-id]')].filter(p => {
+      const [icon, overlay] = p.querySelectorAll('img');
+      return icon && overlay && !icon.classList.contains('rounded') && overlay.classList.contains('rounded');
     });
+
+  const hideGroupPosts = () => {
+    if (window.location.pathname !== '/') return;
+    (window.isDesktopMode() ? desktopGroupPosts() : mobileGroupPosts())
+      .forEach(post => { if (post) post.style.display = 'none'; });
   };
 
-  hideGroupPosts([document.body]);
-
-  new MutationObserver(muts =>
-    muts.forEach(m => hideGroupPosts([...m.addedNodes]))
-  ).observe(document.body, { childList: true, subtree: true });
+  hideGroupPosts();
+  new MutationObserver(hideGroupPosts).observe(document.body, { childList: true, subtree: true });
 })();
 

@@ -2,4 +2,4 @@
 
 <ins>**Changelog:**</ins>
 
-* Bug Fix: Group post toggle not working which is now fixed.
+* Bug Fix: Hide Groups now actually hides group posts in the feed (mobile and desktop layouts).
