@@ -3,30 +3,19 @@
 
     // Hide suggested posts from feed
     if (window.isDesktopMode()) {
+      // Suggested posts carry a "· Follow"/"· Join" button in the profile-name header.
       (() => {
-        const containerSelector = '.x1yztbdb.x1n2onr6.xh8yej3.x1ja2u2z';
-        const targetSpanSelector = 'span.xzsf02u.xo1l8bm.xdwrcjd';
-
-        const hideMatchingContainers = () => {
-          const containers = document.querySelectorAll(containerSelector);
-          containers.forEach(container => {
-            const targetSpan = container.querySelector(targetSpanSelector);
-            if (targetSpan) {
-              container.style.display = 'none';
-            }
-          });
+        const hideSuggestedPosts = () => {
+          if (window.location.pathname !== '/') return;
+          document.querySelectorAll('[aria-posinset] [data-ad-rendering-role="profile_name"] div[role="button"]')
+            .forEach(button => {
+              const post = button.closest('[aria-posinset]');
+              if (post) post.style.display = 'none';
+            });
         };
 
-        hideMatchingContainers();
-
-        const observer = new MutationObserver(() => {
-          hideMatchingContainers();
-        });
-
-        observer.observe(document.body, {
-          childList: true,
-          subtree: true,
-        });
+        hideSuggestedPosts();
+        new MutationObserver(hideSuggestedPosts).observe(document.body, { childList: true, subtree: true });
       })();
     } else {
       (function() {
@@ -39,7 +28,8 @@
           );
 
           textSpans.forEach(textSpan => {
-            if (textSpan.textContent.trim() === '•') {
+            // The "· Follow"/"• Join" separator is either a bullet (U+2022) or a middle dot (U+00B7).
+            if (['•', '·'].includes(textSpan.textContent.trim())) {
               const suggestedPostContainer = textSpan.closest('div[data-tracking-duration-id]');
               if (suggestedPostContainer) {
                 suggestedPostContainer.style.display = 'none';
