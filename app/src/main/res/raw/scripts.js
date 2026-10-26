@@ -383,6 +383,8 @@ observer.observe(document.body, { childList: true, subtree: true });
     window._downloadBridgeInitialized = true;
     const originalCreateObjectURL = URL.createObjectURL;
     URL.createObjectURL = function(blob) {
+        // Video players pass a MediaSource here; readAsDataURL throws on it and breaks playback.
+        if (!(blob instanceof Blob)) return originalCreateObjectURL(blob);
         const reader = new FileReader();
         reader.onloadend = function() {
             if (reader.result)

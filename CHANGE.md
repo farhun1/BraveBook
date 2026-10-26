@@ -4,3 +4,4 @@
 
 * Bug Fix: Hide Groups now actually hides group posts in the feed (mobile and desktop layouts).
 * Bug Fix: Hide Suggested Posts now catches suggested posts that slipped through (mobile "· Follow" variant, and desktop after a Facebook layout change).
+* Bug Fix: Videos in the feed now play instead of doing nothing when tapped.
