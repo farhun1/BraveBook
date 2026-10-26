@@ -21,8 +21,12 @@ extensions.configure<ApplicationExtension> {
         applicationId = "com.hello.bravebook"
         minSdk = 23
         targetSdk = 36
-        versionCode = 14
-        versionName = "1.0.1"
+        // CI passes -PappVersion=<major>.<minor> from the release tag.
+        // shortcut: versionCode = major * 100 + minor, so minor must stay below 100.
+        val appVersion = (project.findProperty("appVersion") as String?) ?: "1.0"
+        val (major, minor) = appVersion.split(".").map { it.toInt() }
+        versionCode = major * 100 + minor
+        versionName = appVersion
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
